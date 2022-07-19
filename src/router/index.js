@@ -23,3 +23,24 @@ const router = createRouter({
 });
 
 export default router;
+
+export function format(): {
+  thousands: (num: string | number) => string;
+  addSymbol: (num: string | number) => string;
+} {
+  let symbol: boolean | null = null;
+
+  function thousands(num: string | number) {
+    if (!symbol) symbol = Number(num) > 0;
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function addSymbol(num: string | number) {
+    if (!symbol) symbol = Number(num) > 0;
+    const res = (symbol ? "+" : "-") + num;
+    symbol = null;
+    return res;
+  }
+
+  return { thousands, addSymbol };
+}
